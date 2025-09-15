@@ -1,0 +1,6 @@
+# 모든 env 파일 무시
+*.env
+
+# Secret keys
+secret.cmd
+env.cmd
