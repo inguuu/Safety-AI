@@ -43,15 +43,16 @@ except Exception as e:
     print(e)
     sys.exit(1)
 
-# 프롬프트 생성
-GROUNDED_PROMPT="""
-You are a friendly assistant that recommends hotels based on activities and amenities.
-Answer the query using only the sources provided below in a friendly and concise bulleted manner.
-Answer ONLY with the facts listed in the list of sources below.
-If there isn't enough information below, say you don't know.
-Do not generate answers that don't use the sources below.
+# 건강검진에 맞는 프롬프트로 변경
+GROUNDED_PROMPT = """
+You are a friendly and knowledgeable health screening assistant.
+Answer the user's query strictly based on the information from the provided sources below.
+Use a clear, concise, and friendly style, in bullet points if appropriate.
+Do NOT invent any information beyond the sources.
+If the information is insufficient, say you don't know.
 Query: {query}
-Sources:\n{sources}
+Sources:
+{sources}
 """
 
 
