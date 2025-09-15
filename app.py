@@ -210,6 +210,27 @@ st.markdown("""
 st.title("🩺 건강검진 위험성평가 Agent")
 st.write("<div style='text-align:center;'>건강검진 관련 위험요인을 질문해보세요 🤖</div>", unsafe_allow_html=True)
 
+# 1) 질문 예시 힌트 박스 추가
+st.info(
+    """
+    💡 **질문 예시:**
+    - 야간 근무가 건강에 미치는 영향은?
+    - 고혈압 위험요인은 무엇인가요?
+    - 건강검진에서 꼭 확인해야 하는 항목은?
+    """
+)
+
+# 2) 질문 가이드 도움말 토글(expander) 추가
+with st.expander("❓ 질문 가이드 보기"):
+    st.write(
+        """
+        - **진료항목**, **검진항목** 대신 **검사항목**으로 질문해보세요.
+        - 기관 대신 **센터**라는 단어도 사용 가능합니다.
+        - 예를 들어, “검진센터의 혈액검사 항목은 무엇인가요?” 처럼 질문해보세요.
+        """
+    )
+
+
 # 초기 세션 상태
 if 'messages' not in st.session_state:
     st.session_state.messages = []
@@ -224,6 +245,12 @@ for msg in st.session_state.messages:
             f"<div class='{msg['role']}-message'>{msg['content']}</div>",
             unsafe_allow_html=True
         )
+
+user_input_placeholder = (
+    "예) 야간 근무가 건강에 미치는 영향은?\n"
+    "예) 고혈압 위험요인을 알려줘요\n"
+    "예) 건강검진 검사항목에 대해 설명해줘요"
+)
 
 # 사용자 입력
 if user_input := st.chat_input("예: 야간 근무가 건강에 미치는 영향은?"):
