@@ -104,7 +104,12 @@
 
 ```plaintext
 📁 ai-health-agent/
-├── app.py                  # Streamlit UI + GPT 연결
+├── app.py
+├── config.py
+├── preprocess.py
+├── search_handler.py
+├── llm_handler.py
+├── ui_components.py
 ├── index_setup.py          # Azure Search Index 구성
 ├── datasource_indexer.py   # DataSource, Skillset, Indexer 자동화
 ├── run_indexer.py          # 인덱서 수동 실행
