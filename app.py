@@ -53,16 +53,60 @@ Do not generate answers that don't use the sources below.
 Query: {query}
 Sources:\n{sources}
 """
+
+
+SYNONYM_MAP = {
+    "진료항목": "검사항목",
+    "검진항목": "검사항목",
+    "기관": "센터",
+    # 필요시 더 추가
+}
+
+
+def generate_synonym_prompt(raw_query: str, synonym_map: dict) -> str:
+    mapping_lines = "\n".join(
+        [f"'{k}'는 '{v}'로 변경해주세요." for k, v in synonym_map.items()]
+    )
+    
+    prompt = f"""
+    다음 문장에서 아래 단어들을 각각 대응하는 단어로 바꾸어 주세요.
+    단어 매핑:
+    {mapping_lines}
+    문장: "{raw_query}"
+    문맥이 자연스러운 형태로 변환해 주세요.
+    """
+    return prompt
+
+
+def preprocess_query_with_openai(raw_query: str, synonym_map: dict) -> str:
+    prompt = generate_synonym_prompt(raw_query, synonym_map)
+    
+    response = openai_client.chat.completions.create(
+        model=AZURE_DEPLOYMENT_MODEL,
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=100,
+        temperature=0,
+    )
+    processed_query = response.choices[0].message.content.strip()
+    return processed_query
+
+
 # LLM 응답 함수 (AISEARCH + GPT 호출 포함)
 def get_grounded_response(messages: list):
     user_query = messages[-1]['content']  # 마지막 유저 메시지 기준
 
+    # 1. 전처리해서 유사어 치환
+    processed_query = preprocess_query_with_openai(user_query, SYNONYM_MAP)
+
+
+    # 2. 원본 쿼리와 치환된 쿼리를 모두 포함해서 검색어 구성
+    combined_query = f'"{user_query}" OR "{processed_query}"'
     try:
         # Azure Search에서 검색
         search_result = search_client.search(
-            search_text=user_query,
+            search_text=combined_query,
             top=5,
-            select="Content,DocumentName,Tags"
+            select="Content,DocumentName,Tags",
         )
         search_results_list = list(search_result)
     except Exception as e:
@@ -91,7 +135,7 @@ def get_grounded_response(messages: list):
     # GPT 입력 메시지
     messages = [
         {"role": "user",
-         "content": GROUNDED_PROMPT.format(query=user_query, sources=sources_formatted)}
+         "content": GROUNDED_PROMPT.format(query=processed_query, sources=sources_formatted)}
     ]
 
     # GPT 호출
@@ -104,30 +148,75 @@ def get_grounded_response(messages: list):
 
     return response.choices[0].message.content
 
+
+# ------------------------------------------
+# 🎨 프론트엔드: Streamlit UI (ChatGPT 스타일)
+# ------------------------------------------
+st.set_page_config(page_title="건강검진 위험성평가 Agent", page_icon="🩺", layout="centered")
+
+# 💅 스타일: ChatGPT 홈페이지 유사
+st.markdown("""
+    <style>
+        html, body {
+            background-color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .user-message, .assistant-message {
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px auto;
+            max-width: 700px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .user-message {
+            background-color: #f1f1f1;
+            color: #000;
+        }
+
+        .assistant-message {
+            background-color: #e8f0fe;
+            color: #000;
+        }
+
+        .stChatInput input {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 12px !important;
+            border: 1px solid #ccc;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .stChatMessage {
+            display: flex;
+            justify-content: center;
+        }
+
+        footer, header {visibility: hidden;}
+    </style>
+""", unsafe_allow_html=True)
 # -----------------------
 # 🎨 Streamlit UI 디자인
 # -----------------------
-st.set_page_config(page_title="건강검진 위험성평가 Agent", page_icon="🩺")
-
-# 스타일 적용 (CSS 삽입)
-st.markdown("""
-    <style>
-        .user-message {background-color: #e0f7fa; padding: 10px; border-radius: 8px; margin-bottom: 10px;}
-        .assistant-message {background-color: #fff3e0; padding: 10px; border-radius: 8px; margin-bottom: 10px;}
-        .stChatInput input {border-radius: 8px;}
-    </style>
-""", unsafe_allow_html=True)
-
 st.title("🩺 건강검진 위험성평가 Agent")
-st.write("건강검진 관련 위험요인이나 유해요인을 입력해 주세요. 🤖")
+st.write("<div style='text-align:center;'>건강검진 관련 위험요인을 질문해보세요 🤖</div>", unsafe_allow_html=True)
 
-# 초기 메시지
+# 초기 세션 상태
 if 'messages' not in st.session_state:
     st.session_state.messages = []
+
 if 'shown_no_search_msg' not in st.session_state:
     st.session_state.shown_no_search_msg = False
 
-# 채팅 기록 표시
+# 이전 채팅 메시지 표시
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(

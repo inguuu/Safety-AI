@@ -21,7 +21,7 @@ load_dotenv()
 # 환경변수에서 가져오기
 search_endpoint = os.getenv('AZURE_SEARCH_ENDPOINT')
 search_api_key = os.getenv('AZURE_SEARCH_API_KEY')
-index_name = "risk-assessment-index"
+index_name = "safety_index"
 
 credential = AzureKeyCredential(search_api_key)
 index_client = SearchIndexClient(endpoint=search_endpoint, credential=credential)
@@ -31,7 +31,7 @@ fields = [
     SimpleField(name="PageId", type=SearchFieldDataType.String, key=True),
     SearchableField(name="DocumentName", type=SearchFieldDataType.String, sortable=True),
     SearchableField(name="Content", type=SearchFieldDataType.String, analyzer_name="en.lucene"),
-    SearchableField(name="RiskCategory", type=SearchFieldDataType.String, facetable=True, filterable=True, sortable=True),
+    SearchableField(name="CenterName", type=SearchFieldDataType.String, facetable=True, filterable=True, sortable=True),
     SearchableField(name="Tags", collection=True, type=SearchFieldDataType.String, facetable=True, filterable=True),
     SearchableField(
         name="OCRText", 
