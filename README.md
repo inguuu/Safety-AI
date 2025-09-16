@@ -1,4 +1,3 @@
-# 🚀 KT 건강검진 AI 알림이 – MS AI MVP 프로젝트 기획안
 
 ## 📌 1. 프로젝트 개요
 
@@ -17,7 +16,13 @@
 
 ---
 
+
+
 ## 📊 2. 시스템 아키텍처
+
+
+<img width="1653" height="701" alt="image" src="https://github.com/user-attachments/assets/d6886ff8-d3ad-45ba-a4c6-5c203242bae0" />
+
 
 ```plaintext
 ┌────────────┐
@@ -46,9 +51,28 @@
 - **Azure AI Search** (Indexer, Skillset, Index)  
 - **Azure OpenAI (GPT-4.1-mini)**  
 - **Streamlit UI (ChatGPT 스타일)**  
-- **Blob Storage + PDF 문서 OCR 스킬**
+- **Blob Storage(Text, OCR)**
+- **Azure Database for MySQL(Text, OCR)**
 
 ---
+
+### 📂 프로젝트 구조 요약
+
+```plaintext
+📁 ai-health-agent/
+├── app.py                  # app
+├── config.py               # 환경 변수 또는 공통 설정 관리
+├── preprocess.py           # 유저 입력 전처리
+├── search_handler.py       # Azure Search 쿼리 핸들링
+├── llm_handler.py          # OpenAI or Azure OpenAI LLM 호출 관리
+├── ui_components.py        # UI, CSS 분리 
+├── index_setup.py          # Azure Search Index 구성
+├── datasource_indexer.py   # DataSource, Skillset, Indexer 자동화
+├── run_indexer.py          # 인덱서 수동 실행
+├── UploadDocs.cmd          # 문서 업로드 스크립트
+├── .env                    # 환경변수 설정
+└── README.md               # 💬 현재 문서
+```
 
 ## 🧠 3. 핵심 기술 포인트
 
@@ -74,64 +98,21 @@
 
 ## 🖥️ 4. 라이브 데모
 
-### 💻 Streamlit 데모 기능
-- 자연어 질의 입력 (예: “고혈압 위험요인이 뭐야?”)
-- 전처리된 유사어 자동 치환
-- Azure Search에서 관련 문서 검색
-- 근거 기반 응답 또는 GPT 직접 생성 응답 출력
-
-### 🔍 데모 주요 포인트
-- 🤖 사용자 입력 영역 (ChatGPT 스타일)
-- 📑 관련 문서 리스트 포함된 답변
-- ❓ 예시 질문 및 가이드 제공
-- 📂 실제 PDF 기반 검색 결과 시연
+[👉 웹 서비스 시연 바로가기](https://igigwebapp-d2bcajc4fyfwagbp.koreacentral-01.azurewebsites.net)
 
 ---
 
 ## 🔭 5. 향후 개선 및 확장 계획
 
-| 개선 방향             | 설명 |
-|------------------------|------|
-| 🔁 유사어 DB 확장       | 산업군/센터별 사용자 언어 다양성 반영 |
-| 🧠 의학 지식 강화       | 진단 기준, 위험 수치 기반 GPT 파인튜닝 또는 FAQ 연동 |
-| 🏥 EMR 연동             | 실시간 환자정보 기반 개인화된 리포트 제공 |
-| 🧾 레포트 생성 자동화   | 검진 결과 요약 보고서 PDF 생성 |
-| 🧪 LangChain 에이전트화 | 복합 질의 처리 및 멀티툴 연동 구조 구축 |
+| 개선 항목                | 설명 |
+|-------------------------|------|
+| ✅ 유사어 DB 확장         | 산업군 및 의료기관별 다양한 사용자 언어 반영 |
+| ✅ 시스템 간 DB 연동      | 검진신청 및 검진결과를 활용하여 개발 범위 확장 |
+| ✅ 다운로드 기능 추가     | 검색 결과 기반 제안서, 리포트 다운로드 기능 제공 |
+| ✅ 보안 및 인증 강화      | Apa GW, KeyVault, EntraId 연결 |
 
 ---
 
-## 📂 프로젝트 구조 요약
-
-```plaintext
-📁 ai-health-agent/
-├── app.py
-├── config.py
-├── preprocess.py
-├── search_handler.py
-├── llm_handler.py
-├── ui_components.py
-├── index_setup.py          # Azure Search Index 구성
-├── datasource_indexer.py   # DataSource, Skillset, Indexer 자동화
-├── run_indexer.py          # 인덱서 수동 실행
-├── UploadDocs.cmd          # 문서 업로드 스크립트
-├── .env                    # 환경변수 설정
-└── README.md               # 💬 현재 문서
-```
----
-
-## 🧩 기술 스택
-
-| 구분 | 기술 |
-|------|------|
-| 💬 자연어 처리 | Azure OpenAI (GPT-4.1-mini) |
-| 🔍 검색 | Azure AI Search (Indexer, Skillset, Index, Blob Storage) |
-| 🧠 전처리 | Prompt 기반 유사어 치환 (OpenAI) |
-| 🧑‍💻 프론트엔드 | Streamlit (Chat UI 스타일) |
-| 📄 문서 처리 | PDF (OCR Skill 포함), Blob Storage 연동 |
-| ⚙️ 자동화 | Indexer / Skillset / DataSource 생성 스크립트 |
-| 🔐 보안 | 환경 변수 기반 키 관리 (.env) |
-
----
 
 ## ✅ 결론
 
