@@ -2,10 +2,11 @@ import streamlit as st
 from preprocess import preprocess_query
 from search_handler import search_documents
 from llm_handler import get_grounded_answer, fallback_answer
-from ui_components import render_examples, render_guides
+from ui_components import render_examples, render_guides, render_styles
 
 # Streamlit 기본 설정
 st.set_page_config(page_title="건강검진 위험성평가 Agent", page_icon="🩺", layout="centered")
+render_styles()
 render_examples()
 render_guides()
 
@@ -21,7 +22,7 @@ for msg in st.session_state.messages:
         st.markdown(f"<div class='{msg['role']}-message'>{msg['content']}</div>", unsafe_allow_html=True)
 
 # 사용자 입력
-if user_input := st.chat_input("예: 야간 근무가 건강에 미치는 영향은?"):
+if user_input := st.chat_input("건강검진에 대해 무엇이든 물어보세요"):
     st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
         st.markdown(user_input)
