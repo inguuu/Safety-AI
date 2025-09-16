@@ -5,7 +5,7 @@ from llm_handler import get_grounded_answer, fallback_answer
 from ui_components import render_examples, render_guides, render_styles
 
 # Streamlit 기본 설정
-st.set_page_config(page_title="건강검진 위험성평가 Agent", page_icon="💙", layout="centered")
+st.set_page_config(page_title="건강검진 안내 Agent", page_icon="💙", layout="centered")
 
 # 상단 로고 + 제목 구성
 col1, col2 = st.columns([1, 5])
