@@ -7,6 +7,29 @@ from ui_components import render_examples, render_guides, render_styles
 # Streamlit 기본 설정
 st.set_page_config(page_title="건강검진 안내 Agent", page_icon="💙", layout="centered")
 
+
+with st.sidebar:
+    st.header("설정")
+
+    # 검색 범위 선택 (기존 selectbox 유지 가능)
+    search_filter = st.selectbox("답변 스타일",  ["정확도 우선", "빠르게", "간략하게", "상세하게"])
+       
+    st.markdown("---")  # 구분선
+
+    st.subheader("빠른 메뉴")
+
+    if st.button("💬 정확도 피드백"):
+        st.info("답변의 정확도에 대해 피드백을 남겨주세요!")
+        # 여기에 피드백 폼 등 추가 가능
+
+    if st.button("❓ 문의하기"):
+        st.info("궁금한 점이나 불편사항을 문의하세요.")
+        # 문의 폼 혹은 이메일 링크 연결 가능
+
+    if st.button("🏥 건강검진 센터 문의"):
+        st.info("가까운 건강검진 센터 정보를 안내해드립니다.")
+        # 센터 안내 기능 트리거 가능
+
 # 상단 로고 + 제목 구성
 col1, col2 = st.columns([1, 5])
 
@@ -46,7 +69,7 @@ if user_input := st.chat_input("건강검진에 대해 무엇이든 물어보세
         docs = search_documents(combined_query)
 
         if docs:
-            response = get_grounded_answer(processed_query, docs)
+            response = get_grounded_answer(processed_query, docs, style=search_filter)
         else:
             response = fallback_answer(st.session_state.messages)
             if not st.session_state.shown_no_search_msg:
