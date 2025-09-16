@@ -5,7 +5,20 @@ from llm_handler import get_grounded_answer, fallback_answer
 from ui_components import render_examples, render_guides, render_styles
 
 # Streamlit 기본 설정
-st.set_page_config(page_title="건강검진 위험성평가 Agent", page_icon="🩺", layout="centered")
+st.set_page_config(page_title="건강검진 위험성평가 Agent", page_icon="💙", layout="centered")
+
+# 상단 로고 + 제목 구성
+col1, col2 = st.columns([1, 5])
+
+with col1:
+    st.image("data/healthy.png", width=60)
+
+with col2:
+    st.markdown("""
+    <div style="display: flex; align-items: center; height: 60px;">
+        <h1 style="margin: 0; padding-left: 8px;">건강검진 안내 AGENT</h1>
+    </div>
+    """, unsafe_allow_html=True)
 render_styles()
 render_examples()
 render_guides()

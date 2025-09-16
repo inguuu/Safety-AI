@@ -13,7 +13,7 @@ def render_examples():
 
 
 def render_guides():
-    with st.expander("❓ 질문 가이드 보기"):
+    with st.expander("🔍 질문 가이드 보기"):
         st.write(
             """
             - 건강검진과 관련된 **위험요인**, **검사 항목**, **센터 정보**, **예약 가능 여부** 등을 자유롭게 질문해보세요.
@@ -26,40 +26,53 @@ def render_guides():
 
 def render_styles():
     st.markdown("""
-<style>
-/* 기본 채팅 아이콘 숨기기 */
-.stChatMessage div[data-testid="stMarkdownContainer"] > div > div:first-child {
-    display: none !important;
-}
+ <style>
+    /* 기본 채팅 아이콘 숨기기 */
+    .stChatMessage div[data-testid="stMarkdownContainer"] > div > div:first-child {
+        display: none !important;
+    }
 
-/* 메시지 스타일 조정 (아이콘 대신 이미지 공간 확보) */
-.user-message, .assistant-message {
-    display: flex;
-    align-items: flex-start;
-    max-width: 700px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    margin: 16px auto;
-    font-size: 16px;
-    line-height: 1.6;
-}
+    /* 상단 로고와 타이틀 간격 줄이기 */
+    .css-1d391kg {  /* Streamlit columns container 클래스, 상황에 따라 다를 수 있음 */
+        gap: 8px !important;  /* 기본 간격보다 더 좁게 */
+        align-items: center;  /* 수직 가운데 정렬 */
+    }
 
-.user-message img, .assistant-message img {
-    width: 32px;
-    height: 32px;
-    margin-right: 12px;
-    border-radius: 50%;
-}
+    /* 메시지 스타일 조정 */
+    .user-message, .assistant-message {
+        display: flex;
+        align-items: flex-start;
+        max-width: 700px;
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin: 16px auto;
+        font-size: 16px;
+        line-height: 1.6;
+    }
 
-/* 말풍선 배경 */
-.user-message {
-    background-color: #f1f1f1;
-    color: #000;
-}
+    .user-message img, .assistant-message img {
+        width: 32px;
+        height: 32px;
+        margin-right: 12px;
+        border-radius: 50%;
+    }
 
-.assistant-message {
-    background-color: #e8f0fe;
-    color: #000;
-}
-</style>
+    /* 사용자 메시지 말풍선 배경 */
+    .user-message {
+        background-color: #f1f1f1;
+        color: #000;
+    }
+
+    /* 어시스턴트 메시지 말풍선 배경 - 빨간색에서 파란색 계열로 변경 */
+    .assistant-message {
+        background-color: #d0e3ff;  /* 부드러운 연파랑 */
+        color: #000;
+    }
+
+    /* 물음표(expander) 텍스트 파란색으로 변경 */
+    .streamlit-expanderHeader {
+        color: #0a66c2 !important;  /* 진한 파랑 */
+        font-weight: 600;
+    }
+    </style>
 """, unsafe_allow_html=True)

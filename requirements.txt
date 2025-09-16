@@ -3,4 +3,4 @@ openai
 python-dotenv
 azure-search-documents
 azure-core
-mysql-connector-python
+pymysql
