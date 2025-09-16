@@ -98,9 +98,16 @@
 
 ## 🖥️ 4. 라이브 데모
 
+<img width="1419" height="935" alt="image" src="https://github.com/user-attachments/assets/3b05a274-e075-4a7e-bf7e-9d0b88e2c7f9" />
+
+
+
 [👉 웹 서비스 시연 바로가기](https://igigwebapp-d2bcajc4fyfwagbp.koreacentral-01.azurewebsites.net)
 
+[🎥 데모 영상 보기](https://drive.google.com/file/d/1_WNDX4MQNysxOT_uG1zzxDhMtWODmJwM/view?usp=drive_link)
+
 ---
+
 
 ## 🔭 5. 향후 개선 및 확장 계획
 
